@@ -7,3 +7,4 @@ PyMuPDF
 fpdf  
 python-dotenv  
 langchain-google-vertexai
+pypdf2
