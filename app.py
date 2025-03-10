@@ -6,10 +6,10 @@ import PyPDF2
 from fpdf import FPDF
 
 # Set API Key
-os.environ["GOOGLE_API_KEY"] = "your_api_key_here"
+google_api_key = st.secrets["GOOGLE_API_KEY"]
 
 # Initialize Gemini LLM
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", convert_system_message_to_human=True)
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", convert_system_message_to_human=True, google_api_key=google_api_key)
 
 # Streamlit UI Setup
 st.set_page_config(page_title="HR AI System", layout="wide", initial_sidebar_state="expanded")
