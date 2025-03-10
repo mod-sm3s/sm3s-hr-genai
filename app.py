@@ -1,14 +1,14 @@
 import streamlit as st
-from langchain.chat_models import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import HumanMessage
 import PyPDF2
 from fpdf import FPDF
-
+google_api_key = st.secrets["GOOGLE_API_KEY"]
 # Initialize LangChain Gemini Model
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.0-flash",
     temperature=0.7,
-    google_api_key="your-api-key-here",
+    google_api_key=google_api_key,
     convert_system_message_to_human=True
 )
 
