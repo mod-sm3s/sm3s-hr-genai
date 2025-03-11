@@ -34,9 +34,7 @@ st.markdown("""
             font-weight: bold;
         }
     </style>
-    <div class="logo">
-        <img src="logo.png" width="150">
-    </div>
+    
     <h1 class="title">HR GEN AI APP</h1>
 """, unsafe_allow_html=True)
 
