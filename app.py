@@ -14,7 +14,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", convert_system_message_to
 # Streamlit UI Setup
 
 st.set_page_config(page_title="HR AI System", layout="wide", initial_sidebar_state="expanded")
-st.title("HR GENAI APP")
+#st.title("HR GENAI APP")
 st.image("logo.png", width=250)
 
 # ---- STYLES ----
@@ -23,7 +23,21 @@ st.markdown("""
         body {background-color: #0d1117; color: #e6edf3;}
         .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {border: 2px solid #3ddc97;}
         .stButton>button {background: linear-gradient(90deg, #3ddc97, #00aaff); color: white;}
+        .logo {
+            display: flex;
+            justify-content: right;  /* Moves logo to the right */
+            padding-right: 20px;  /* Adjust as needed */
+        }
+        .title {
+            text-align: center;  /* Centers the title */
+            font-size: 30px;
+            font-weight: bold;
+        }
     </style>
+    <div class="logo">
+        <img src="logo.png" width="150">
+    </div>
+    <h1 class="title">HR GEN AI APP</h1>
 """, unsafe_allow_html=True)
 
 # ---- FUNCTION: Job Description Generator ----
