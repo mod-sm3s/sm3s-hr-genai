@@ -21,7 +21,7 @@ st.image("logo.png", width=250)
 st.markdown("""
     <style>
         body {background-color: #0d1117; color: #e6edf3;}
-        .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {border: 2px solid #3ddc97;}
+        .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {border: 2px solid #F7E7CE;}
         
         .logo {
             display: flex;
@@ -37,12 +37,12 @@ st.markdown("""
             background-color: #F7E7CE !important;  /* Champagne color */
             color: black !important;  /* Button text color */
             border-radius: 8px !important;  /* Rounded corners */
-            border: 1px solid #E6D5B8 !important;  /* Subtle border */
+            border: 1px solid #F7E7CE!important;  /* Subtle border */
             font-size: 16px !important;  /* Adjust font size */
             padding: 10px 20px !important;  /* Adjust padding */
         }
         div.stButton > button:hover {
-            background-color: #E6D5B8 !important;  /* Slightly darker champagne on hover */
+            background-color: #F7E7CE !important;  /* Slightly darker champagne on hover */
             color: black !important;
         }
     </style>
