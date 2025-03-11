@@ -33,6 +33,18 @@ st.markdown("""
             font-size: 30px;
             font-weight: bold;
         }
+        div.stButton > button {
+            background-color: #F7E7CE !important;  /* Champagne color */
+            color: black !important;  /* Button text color */
+            border-radius: 8px !important;  /* Rounded corners */
+            border: 1px solid #E6D5B8 !important;  /* Subtle border */
+            font-size: 16px !important;  /* Adjust font size */
+            padding: 10px 20px !important;  /* Adjust padding */
+        }
+        div.stButton > button:hover {
+            background-color: #E6D5B8 !important;  /* Slightly darker champagne on hover */
+            color: black !important;
+        }
     </style>
     
     <h1 class="title">HR GEN AI APP</h1>
