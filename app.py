@@ -15,6 +15,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", convert_system_message_to
 
 st.set_page_config(page_title="HR AI System", layout="wide", initial_sidebar_state="expanded")
 st.title("HR GENAI APP")
+st.image("logo.png", width=150)
 
 # ---- STYLES ----
 st.markdown("""
