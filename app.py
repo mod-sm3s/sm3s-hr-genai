@@ -15,7 +15,15 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", convert_system_message_to
 
 st.set_page_config(page_title="HR AI System", layout="wide", initial_sidebar_state="expanded")
 st.title("HR GENAI APP")
-
+title_alignment=
+"""
+<style>
+#the-title {
+  text-align: center
+}
+</style>
+"""
+st.markdown(title_alignment, unsafe_allow_html=True)
 # ---- STYLES ----
 st.markdown("""
     <style>
