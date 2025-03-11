@@ -22,7 +22,7 @@ st.markdown("""
     <style>
         body {background-color: #0d1117; color: #e6edf3;}
         .stTextInput, .stTextArea, .stSelectbox, .stFileUploader {border: 2px solid #3ddc97;}
-        .stButton>button {background: linear-gradient(90deg, #3ddc97, #00aaff); color: white;}
+        
         .logo {
             display: flex;
             justify-content: right;  /* Moves logo to the right */
