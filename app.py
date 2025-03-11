@@ -12,6 +12,7 @@ google_api_key = st.secrets["GOOGLE_API_KEY"]
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", convert_system_message_to_human=True, google_api_key=google_api_key)
 
 # Streamlit UI Setup
+st.title("HR GENAI APP")
 st.set_page_config(page_title="HR AI System", layout="wide", initial_sidebar_state="expanded")
 
 # ---- STYLES ----
