@@ -27,5 +27,10 @@ def evaluate_resume(job_desc_text, resume_text):
     matched_skills = job_skills.intersection(resume_skills)
     missing_skills = job_skills - resume_skills
 
-    return matched_skills, missing_skills
+    # Format output
+    skill_comparison = {
+        skill: "✅ Yes" if skill in matched_skills else "❌ No"
+        for skill in job_skills
+    }
 
+    return skill_comparison
