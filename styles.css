@@ -1,0 +1,39 @@
+/* General Styling */
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Title */
+h1, h2, h3, h4 {
+    color: #00ffcc;
+    text-align: center;
+}
+
+/* Input Boxes */
+input, textarea {
+    background-color: #222;
+    color: #00ffcc;
+    border: 1px solid #00ffcc;
+}
+
+/* Buttons */
+button {
+    background-color: #d4af91; /* Champagne color */
+    color: black;
+    border-radius: 5px;
+    padding: 10px 15px;
+}
+
+button:hover {
+    background-color: #c4a484;
+}
+
+/* Logo */
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+}
+
