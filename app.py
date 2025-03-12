@@ -42,6 +42,7 @@ with tab1:
         st.write(jd)
 
 # Resume Evaluator UI
+
 with tab2:
     st.title("📑 Resume Evaluator")
 
@@ -52,11 +53,10 @@ with tab2:
         job_desc_text = extract_text_from_pdf(uploaded_job_desc)
         resume_text = extract_text_from_pdf(uploaded_resume)
 
-        matched_skills, missing_skills = evaluate_resume(job_desc_text, resume_text)
+        skill_comparison = evaluate_resume(job_desc_text, resume_text)
 
-        st.subheader("✅ Matched Skills")
-        st.write(", ".join(matched_skills) if matched_skills else "None")
+        st.subheader("📊 Skill Match Results")
+        for skill, status in skill_comparison.items():
+            st.write(f"**{skill.capitalize()}**: {status}")
 
-        st.subheader("❌ Missing Skills")
-        st.write(", ".join(missing_skills) if missing_skills else "None")
 
