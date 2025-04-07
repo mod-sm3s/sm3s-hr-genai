@@ -45,7 +45,7 @@ with tab1:
 
 with tab2:
     st.title("📑 Resume Evaluator")
-    inside_tab1, inside_tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
+    inside_tab1, inside_tab2 = st.tabs(["📑 Resume Evaluator Description", "📑 Resume Evaluator Score"])
     with inside_tab2:
         uploaded_job_desc = st.file_uploader("📄 Upload Job Description PDF", type="pdf")
         uploaded_resume = st.file_uploader("📄 Upload Resume PDF", type="pdf")
