@@ -57,7 +57,7 @@ with tab2:
             st.subheader("📊 Skill Descriptions")
             with st.spinner("Wait for it...", show_time=True):
                 st.success("Done!")
-            st.write(desc)
+                st.write(desc)
         
             
     with inside_tab2:
