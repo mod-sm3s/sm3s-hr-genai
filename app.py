@@ -45,18 +45,19 @@ with tab1:
 
 with tab2:
     st.title("📑 Resume Evaluator")
+    inside_tab1, inside_tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
+    with inside_tab2:
+        uploaded_job_desc = st.file_uploader("📄 Upload Job Description PDF", type="pdf")
+        uploaded_resume = st.file_uploader("📄 Upload Resume PDF", type="pdf")
 
-    uploaded_job_desc = st.file_uploader("📄 Upload Job Description PDF", type="pdf")
-    uploaded_resume = st.file_uploader("📄 Upload Resume PDF", type="pdf")
+        if uploaded_job_desc and uploaded_resume:
+            job_desc_text = extract_text_from_pdf(uploaded_job_desc)
+            resume_text = extract_text_from_pdf(uploaded_resume)
 
-    if uploaded_job_desc and uploaded_resume:
-        job_desc_text = extract_text_from_pdf(uploaded_job_desc)
-        resume_text = extract_text_from_pdf(uploaded_resume)
+            skill_comparison = evaluate_resume(job_desc_text, resume_text)
 
-        skill_comparison = evaluate_resume(job_desc_text, resume_text)
-
-        st.subheader("📊 Skill Match Results")
-        for skill, status in skill_comparison.items():
-            st.write(f"**{skill.capitalize()}**: {status}")
+            st.subheader("📊 Skill Match Results")
+            for skill, status in skill_comparison.items():
+                st.write(f"**{skill.capitalize()}**: {status}")
 
 
