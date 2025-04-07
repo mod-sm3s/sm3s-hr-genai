@@ -55,6 +55,8 @@ with tab2:
             resume_text = extract_text_from_pdf(uploaded_resume) 
             desc = resume_description(job_desc_text, resume_text)
             st.subheader("📊 Skill Descriptions")
+            with st.spinner("Wait for it...", show_time=True):
+                st.success("Done!")
             st.write(desc)
         
             
