@@ -64,11 +64,9 @@ with tab2:
             job_desc_text = extract_text_from_pdf(uploaded_job_desc)
             resume_text = extract_text_from_pdf(uploaded_resume)
 
-            with st.spinner("Wait for it...", show_time=True):
-                skill_comparison = resume_score(job_desc_text, resume_text)
-
-                st.subheader("📊 Skill Match Results")
-                for skill, status in skill_comparison.items():
-                    st.write(f"**{skill.capitalize()}**: {status}")
+            skill_comparison = resume_score(job_desc_text, resume_text)
+            st.subheader("📊 Skill Match Results")
+            for skill, status in skill_comparison.items():
+                st.write(f"**{skill.capitalize()}**: {status}")
 
 
