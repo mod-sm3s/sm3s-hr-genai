@@ -56,8 +56,7 @@ with tab2:
             desc = resume_description(job_desc_text, resume_text)
             st.subheader("📊 Skill Descriptions")
             st.write(desc)
-        else:
-            st.error("⚠️ Could not extract text from PDFs.")
+        
             
     with inside_tab2:
         if uploaded_job_desc and uploaded_resume:
