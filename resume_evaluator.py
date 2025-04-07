@@ -20,7 +20,7 @@ def extract_skills(text):
     return set(response.content.lower().split(","))
 
 # Compare job description and resume skills
-def evaluate_resume(job_desc_text, resume_text):
+def resume_score(job_desc_text, resume_text):
     job_skills = extract_skills(job_desc_text)
     resume_skills = extract_skills(resume_text)
 
@@ -34,3 +34,9 @@ def evaluate_resume(job_desc_text, resume_text):
     }
 
     return skill_comparison
+
+def resume_description(job_desc_text, resume_text):
+    prompt = f"Evaluate the resume against the job description.\n\nJob Description:\n{job_desc_text}\n\nResume:\n{resume_text}\n\nHow well does this candidate fit?"
+    
+    response = llm.invoke([HumanMessage(content=prompt)])
+    return response.content
