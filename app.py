@@ -1,6 +1,6 @@
 import streamlit as st
 from job_description import generate_job_description
-from resume_evaluator import evaluate_resume, extract_text_from_pdf
+from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
 import base64
 
 # Page Configuration
@@ -49,12 +49,22 @@ with tab2:
     uploaded_job_desc = st.file_uploader("📄 Upload Job Description PDF", type="pdf")
     uploaded_resume = st.file_uploader("📄 Upload Resume PDF", type="pdf")
     inside_tab1, inside_tab2 = st.tabs(["📑 Resume Evaluator Description", "📑 Resume Evaluator Score"])
+    with inside_tab1:
+        if uploaded_job_desc and uploaded_resume:
+            job_desc_text = extract_text_from_pdf(uploaded_job_desc)
+            resume_text = extract_text_from_pdf(uploaded_resume) 
+            desc = resume_description(job_desc_text, resume_text)
+            st.subheader("📊 Skill Descriptions")
+            st.write(desc)
+        else:
+            st.error("⚠️ Could not extract text from PDFs.")
+            
     with inside_tab2:
         if uploaded_job_desc and uploaded_resume:
             job_desc_text = extract_text_from_pdf(uploaded_job_desc)
             resume_text = extract_text_from_pdf(uploaded_resume)
 
-            skill_comparison = evaluate_resume(job_desc_text, resume_text)
+            skill_comparison = resume_score(job_desc_text, resume_text)
 
             st.subheader("📊 Skill Match Results")
             for skill, status in skill_comparison.items():
