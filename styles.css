@@ -1,103 +1,43 @@
-/* General Styling */
-body {
-    background-color: #121212; /* Dark background */
-    color: #ffffff; /* Light text for contrast */
-    font-family: Arial, sans-serif; /* Consistent font */
-    margin: 0;
-    padding: 0;
-}
+import streamlit as st
 
-/* Headings */
-h1, h2, h3, h4 {
-    color: #00ffcc; /* Teal color for headings */
-    text-align: center; /* Centered headings */
-}
+# Inject custom CSS using st.markdown
+st.markdown("""
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
 
-/* Paragraphs */
-p {
-    line-height: 1.6; /* Improved readability */
-    margin: 0 0 1em;
-}
+        h1, h2, h3, h4 {
+            color: #00ffcc;
+            text-align: center;
+        }
 
-/* Links */
-a {
-    color: #00ffcc; /* Teal color for links */
-    text-decoration: none; /* No underline */
-}
+        input, textarea {
+            background-color: #222222;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            padding: 10px;
+        }
 
-a:hover {
-    text-decoration: underline; /* Underline on hover */
-}
+        button {
+            background-color: #d4af91;
+            color: black;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
 
-/* Navigation Bar */
-nav {
-    background-color: #1f1f1f; /* Slightly lighter dark shade */
-    padding: 0.5em 0;
-}
+        button:hover {
+            background-color: #c4a484;
+        }
 
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    text-align: center; /* Centered navigation items */
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: #ffffff;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-/* Buttons */
-button, .button {
-    background-color: #d4af91; /* Champagne color */
-    color: #000000; /* Black text */
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-button:hover, .button:hover {
-    background-color: #c4a484; /* Slightly darker champagne */
-}
-
-/* Forms */
-input, textarea {
-    background-color: #222222; /* Dark input fields */
-    color: #ffffff;
-    border: 1px solid #00ffcc; /* Teal border */
-    border-radius: 3px;
-    padding: 10px;
-    width: 100%;
-    margin-bottom: 1em;
-}
-
-input:focus, textarea:focus {
-    outline: none;
-    border-color: #d4af91; /* Champagne color on focus */
-}
-
-/* Footer */
-footer {
-    background-color: #1f1f1f;
-    color: #ffffff;
-    text-align: center;
-    padding: 1em 0;
-    margin-top: 2em;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    nav ul li {
-        display: block;
-        margin: 10px 0;
-    }
-}
+        .logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 150px;
+        }
+    </style>
+""", unsafe_allow_html=True)
