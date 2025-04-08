@@ -38,9 +38,25 @@ with tab1:
     experience = st.text_input("Years of Experience (Optional)", "")
 
     if st.button("Generate Job Description"):
-        jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
-        st.subheader("📜 Generated Job Description")
-        st.write(jd)
+        if title:
+            job_desc = generate_job_description(title, industry, responsibilities, skills, experience)
+            st.success("✅ Job Description Generated:")
+            st.write(job_desc)
+
+            # Save as PDF
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size=12)
+            pdf.multi_cell(190, 10, job_desc)
+            pdf_file = "job_description.pdf"
+            pdf.output(pdf_file)
+            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
+
+        else:
+            st.error("⚠️ Please enter a Job Title.")
+        # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
+        # st.subheader("📜 Generated Job Description")
+        # st.write(jd)
 
 # Resume Evaluator UI
 
