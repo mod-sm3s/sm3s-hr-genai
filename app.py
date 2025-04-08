@@ -84,8 +84,17 @@ with tab2:
             resume_text = extract_text_from_pdf(uploaded_resume)
 
             skill_comparison = resume_score(job_desc_text, resume_text)
-            st.subheader("📊 Skill Match Results")
-            for skill, status in skill_comparison.items():
-                st.write(f"**{skill.capitalize()}**: {status}")
+            matched_skills = [skill for skill, status in skill_comparison.items() if "Yes" in status]
+            missing_skills = [skill for skill, status in skill_comparison.items() if "No" in status]
+            st.markdown("<h3>✅ Matched Skills</h3>", unsafe_allow_html=True)
+st.markdown('<div class="skill-box">' + ''.join(
+    f'<span class="skill-tag matched">{skill}</span>' for skill in matched_skills
+) + '</div>', unsafe_allow_html=True)
+
+# Display missing skills
+st.markdown("<h3>❌ Missing Skills</h3>", unsafe_allow_html=True)
+st.markdown('<div class="skill-box">' + ''.join(
+    f'<span class="skill-tag missing">{skill}</span>' for skill in missing_skills
+) + '</div>', unsafe_allow_html=True)
 
 
