@@ -1,47 +1,43 @@
 import streamlit as st
-
-
-import streamlit as st
-
-# Inject CSS that targets real Streamlit component classes
 st.markdown("""
     <style>
-        /* Global dark mode */
-        html, body, [class*="css"] {
-            background-color: #121212 !important;
-            color: #ffffff !important;
-        }
-
-        /* Headings */
-        h1, h2, h3, h4 {
-            color: #00ffcc !important;
-            text-align: center !important;
-        }
-
-        /* Input fields */
-        .stTextInput > div > div > input,
-        .stTextArea > div > textarea {
-            background-color: #222 !important;
-            color: #00ffcc !important;
-            border: 1px solid #00ffcc !important;
-            border-radius: 5px !important;
-            padding: 10px !important;
-        }
-
-        /* Buttons */
-        .stButton > button {
-            background-color: #d4af91 !important;
-            color: black !important;
-            font-weight: bold !important;
-            border-radius: 10px !important;
-            padding: 10px 20px !important;
-            border: none !important;
-        }
-
-        .stButton > button:hover {
-            background-color: #c4a484 !important;
-            color: black !important;
-        }
+        body {
+     background-color: #121212;
+     color: #ffffff;
+ }
+ 
+ /* Title */
+ h1, h2, h3, h4 {
+     color: #00ffcc;
+     text-align: center;
+ }
+ 
+ /* Input Boxes */
+ input, textarea {
+     background-color: #222;
+     color: #00ffcc;
+     border: 1px solid #00ffcc;
+ }
+ 
+ /* Buttons */
+ button {
+     background-color: #d4af91; /* Champagne color */
+     color: black;
+     border-radius: 5px;
+     padding: 10px 15px;
+ }
+ 
+ button:hover {
+     background-color: #c4a484;
+ }
+ 
+ /* Logo */
+ .logo {
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+     width: 150px;
+ }
     </style>
 """, unsafe_allow_html=True)
 
