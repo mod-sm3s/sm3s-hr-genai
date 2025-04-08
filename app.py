@@ -39,7 +39,7 @@ with tab1:
 
     if st.button("Generate Job Description"):
         if job_title:
-            job_desc = generate_job_description(title, industry, responsibilities, skills, experience)
+            job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
             st.success("✅ Job Description Generated:")
             st.write(job_desc)
 
