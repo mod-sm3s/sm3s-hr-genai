@@ -56,10 +56,10 @@ with tab1:
             pdf.output(pdf_file)
         else:
             st.error("⚠️ Please enter a Job Title.")
-    if pdf_file == "":
-        st.error("this is no file")
-    else:
-        st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
+        if pdf_file == "":
+            st.error("this is no file")
+        else:
+            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
         # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
         # st.subheader("📜 Generated Job Description")
         # st.write(jd)
