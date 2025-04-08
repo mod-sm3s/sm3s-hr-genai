@@ -38,6 +38,7 @@ with tab1:
     skills = st.text_area("Required Skills (Optional)", "")
     experience = st.text_input("Years of Experience (Optional)", "")
 
+    pdf_file = ""
     if st.button("Generate Job Description"):
         if job_title:
             pdf = FPDF()
@@ -55,7 +56,10 @@ with tab1:
             pdf.output(pdf_file)
         else:
             st.error("⚠️ Please enter a Job Title.")
-    st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
+    if pdf_file == "":
+        st.error("this is no file")
+    else:
+        st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
         # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
         # st.subheader("📜 Generated Job Description")
         # st.write(jd)
