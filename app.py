@@ -2,6 +2,7 @@ import streamlit as st
 from job_description import generate_job_description
 from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
 import base64
+from fpdf import FPDF
 
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
