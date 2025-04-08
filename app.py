@@ -53,10 +53,9 @@ with tab1:
             pdf.multi_cell(190, 10, job_desc)
             pdf_file = "job_description.pdf"
             pdf.output(pdf_file)
-            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
-
         else:
             st.error("⚠️ Please enter a Job Title.")
+    st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
         # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
         # st.subheader("📜 Generated Job Description")
         # st.write(jd)
