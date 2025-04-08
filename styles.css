@@ -39,5 +39,4 @@ st.markdown("""
             margin-right: auto;
             width: 150px;
         }
-    </style>
-""", unsafe_allow_html=True)
+    </style> """, unsafe_allow_html=True)
