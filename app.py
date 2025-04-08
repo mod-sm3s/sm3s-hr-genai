@@ -23,6 +23,34 @@ def add_logo():
     st.markdown(f"<img src='data:image/png;base64,{encoded}' class='logo'>", unsafe_allow_html=True)
 
 add_logo()
+import streamlit as st
+
+# Custom CSS
+st.markdown("""
+    <style>
+        /* Set background color */
+        .stApp {
+            background-color: #f0f2f6;
+        }
+
+        /* Style headers */
+        .stMarkdown h1 {
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        /* Style the score display */
+        .score-box {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 24px;
+            color: #333333;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # Tabs
 tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
