@@ -17,14 +17,34 @@ body {
     margin-bottom: 20px;
 }
 
-/* Container for missing skills */
-.missing-skills-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
+.skill-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+        }
+        .skill-tag {
+            display: inline-block;
+            padding: 8px 14px;
+            margin: 6px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .matched {
+            background-color: #d4f5dc;
+            color: #137333;
+        }
+        .missing {
+            background-color: #ffe6e6;
+            color: #cc0000;
+        }
+        h3 {
+            color: #0a9396;
+            margin-top: 30px;
+        }
 
 /* Individual skill badge */
 .skill-badge {
