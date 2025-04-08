@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Inject custom CSS using st.markdown
+
 st.markdown("""
     <style>
         body {
