@@ -38,7 +38,7 @@ with tab1:
     experience = st.text_input("Years of Experience (Optional)", "")
 
     if st.button("Generate Job Description"):
-        if title:
+        if job_title:
             job_desc = generate_job_description(title, industry, responsibilities, skills, experience)
             st.success("✅ Job Description Generated:")
             st.write(job_desc)
