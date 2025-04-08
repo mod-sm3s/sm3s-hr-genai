@@ -28,29 +28,54 @@ import streamlit as st
 # Custom CSS
 st.markdown("""
     <style>
-        /* Set background color */
-        .stApp {
-            background-color: #f0f2f6;
-        }
-
-        /* Style headers */
-        .stMarkdown h1 {
-            color: #4CAF50;
-            text-align: center;
-        }
-
-        /* Style the score display */
-        .score-box {
+        .skills-container {
             background-color: #ffffff;
-            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            text-align: center;
-            font-size: 24px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-family: 'Segoe UI', sans-serif;
             color: #333333;
+            margin-top: 20px;
+        }
+
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #ffe6e6;
+            color: #cc0000;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .skill-badge svg {
+            margin-right: 6px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0a9396;
         }
     </style>
 """, unsafe_allow_html=True)
+
+# Render HTML content
+st.markdown(f"<h2>🚫 Missing Skills</h2>", unsafe_allow_html=True)
+
+# Wrap all skills in styled badges
+badges_html = '<div class="skills-container">'
+for skill in missing_skills:
+    badges_html += f"""
+        <div class="skill-badge">
+            ❌ {skill.capitalize()}
+        </div>
+    """
+badges_html += "</div>"
+
+st.markdown(badges_html, unsafe_allow_html=True)
 
 # Tabs
 tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
