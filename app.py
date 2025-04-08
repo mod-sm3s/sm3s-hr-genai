@@ -40,13 +40,14 @@ with tab1:
 
     if st.button("Generate Job Description"):
         if job_title:
+            pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
                 st.success("✅ Job Description Generated:")
                 st.write(job_desc)
 
             # Save as PDF
-            pdf = FPDF()
+            
             pdf.add_page()
             pdf.set_font("Arial", size=12)
             pdf.multi_cell(190, 10, job_desc)
