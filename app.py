@@ -93,7 +93,7 @@ with tab2:
     f'<span class="skill-tag missing">{skill}</span>' for skill in missing_skills
 ) + '</div>', unsafe_allow_html=True)
            #  st.subheader("📊 Skill Match Results")
-             for skill, status in skill_comparison.items():
-                 st.write(f"**{skill.capitalize()}**: {status}")
+             # for skill, status in skill_comparison.items():
+             #     st.write(f"**{skill.capitalize()}**: {status}")
 
 
