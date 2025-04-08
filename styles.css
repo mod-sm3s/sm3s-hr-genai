@@ -1,6 +1,4 @@
 import streamlit as st
-st.markdown("""
-    <style>
         body {
      background-color: #121212;
      color: #ffffff;
@@ -38,16 +36,4 @@ st.markdown("""
      margin-right: auto;
      width: 150px;
  }
-    </style>
-""", unsafe_allow_html=True)
-
-/* # Sample UI
-st.title("✨ Custom Styled Streamlit")
-st.header("Dark Mode with Neon & Champagne")
-
-name = st.text_input("What's your name?")
-message = st.text_area("Leave a message")
-st.button("Submit")
-
-st.write("Hello,", name) */
-
+   
