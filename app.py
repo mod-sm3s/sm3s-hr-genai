@@ -83,9 +83,9 @@ with tab1:
             st.download_button("📥 Download PDF", f, file_name=pdf_path, mime="application/pdf")
     
     # Streamlit download button
-    with open(pdf_file, "rb") as f:
-        st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
-    # Resume Evaluator UI
+        with open(pdf_file, "rb") as f:
+            st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
+        # Resume Evaluator UI
 
 with tab2:
      st.title("📑 Resume Evaluator")
