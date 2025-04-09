@@ -24,7 +24,9 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
 def generate_job_description(title, industry="", responsibilities="", skills="", experience=""):
     base_prompt = f"""
 You are a helpful AI assistant. Generate a professional job description in **Markdown format** for a **{title}** position.
+Return **only the formatted job description** — no explanation or intro text. Do NOT include phrases like "Here’s a job description for..." etc.
 
+Use the following structure:
 The company name is **Smartera**.
 {f"The industry is **{industry}**." if industry else ""}
 {f"Responsibilities include: {responsibilities}." if responsibilities else ""}
