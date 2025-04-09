@@ -17,7 +17,7 @@ load_css()
 # Logo
 def add_logo():
    # logo_path = "logo.png"  
-    logo_path = "logo-sm"
+    logo_path = "logo-sm.png"
     with open(logo_path, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
     st.markdown(f"<img src='data:image/png;base64,{encoded}' class='logo'>", unsafe_allow_html=True)
