@@ -7,11 +7,11 @@ import re
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
 
 # # Job Description Generator
-def generate_job_description(title,company="", industry="", responsibilities="", skills="", experience=""):
-    base_prompt = f"Generate a professional job description for a {title} position. and {company}"
+def generate_job_description(title,, industry="", responsibilities="", skills="", experience=""):
+    base_prompt = f"Generate a professional job description for a {title} position."
     base_prompt += "make the section headers to be blue with higher font size, headers like about , job summary , Responsibilities , font type arial , do not generate html file , just normal file"
-    base_prompt += f"Company name is {company}"
     base_prompt += "Return **only the formatted job description** — no explanation or intro text. Do NOT include phrases like 'Here’s a job description for...' etc."
+    base_prompt += "Do not return the Company name Smartera at the beginning of the result"
     if industry:
         base_prompt += f" The industry is {industry}."
     if responsibilities:
