@@ -66,7 +66,6 @@ with tab1:
             #    st.write(job_desc)
 
             # Save as PDF
-              job_desc = generate_job_description(...)  # Your existing function
 
               pdf_path = generate_job_pdf(job_desc)
 
