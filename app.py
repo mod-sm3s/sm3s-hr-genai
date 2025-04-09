@@ -85,7 +85,6 @@ with tab1:
         else:
             html_content = jd_template.render(
                 job_title=job_title,
-                company=company,
                 responsibilities=responsibilities,
                 qualifications=qualifications,
                 benefits=benefits,
