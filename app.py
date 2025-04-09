@@ -67,9 +67,9 @@ with tab1:
 
             # Save as PDF
 
-              pdf_path = generate_job_pdf(job_desc)
+            pdf_path = generate_job_pdf(job_desc)
 
-              with open(pdf_path, "rb") as f:
+            with open(pdf_path, "rb") as f:
                   st.download_button("📥 Download Formatted Job Description", f, file_name=pdf_path, mime="application/pdf")
 
             
