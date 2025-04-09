@@ -3,10 +3,37 @@ from job_description import generate_job_description
 from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
 import base64
 from fpdf import FPDF
-
+import os
+import re
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
+class PDF(FPDF):
+    def header(self):
+        self.set_font("DejaVu", size=14)
+        self.cell(0, 10, "Job Description", ln=True, align="C")
 
+# Strip markdown and emojis
+def clean_text(text):
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # Remove bold markers
+    text = re.sub(r'[^\x00-\x7F]+', '', text)     # Strip emojis/special
+    return text.strip()
+
+# PDF generation
+pdf = PDF()
+pdf.add_page()
+
+font_path = os.path.join("fonts", "DejaVuSans.ttf")  # Include font in your repo
+pdf.add_font("DejaVu", "", font_path, uni=True)
+pdf.set_font("DejaVu", "", 12)
+
+pdf.multi_cell(0, 10, clean_text(job_desc))
+
+pdf_file = "job_description.pdf"
+pdf.output(pdf_file)
+
+# Streamlit download button
+with open(pdf_file, "rb") as f:
+    st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
 # Custom CSS for Dark Mode
 def load_css():
     with open("styles.css", "r") as f:
@@ -43,19 +70,12 @@ with tab1:
             pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
-                st.markdown("""<style>.job-card {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
-            margin-top: 20px;
-            font-family: 'Segoe UI', sans-serif;
-            color: #333;
-        }
-        .job-card h2 {
-            color: blue;
-        }
-        </style> """, unsafe_allow_html=True)
+                st.markdown("""
+                <style>
+                    h2 {color: #1E90FF !important; /* DodgerBlue *}
+                </style>
+                """, unsafe_allow_html=True)
+                st.markdown(job_desc, unsafe_allow_html=True)
 
 
                 st.markdown('<div class="job-card">', unsafe_allow_html=True)
