@@ -43,7 +43,7 @@ with tab1:
         if job_title:
             pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
-                job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
+                job_desc = generate_job_description(job_title,company, industry, responsibilities, skills, experience)
                 st.markdown("""<style>.job-card {
             background-color: #ffffff;
             padding: 25px;
