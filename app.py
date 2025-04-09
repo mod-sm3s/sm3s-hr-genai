@@ -7,6 +7,11 @@ from fpdf import FPDF
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
 
+class PDF(FPDF):
+    def header(self):
+        self.set_font("DejaVu", size=12)
+        self.cell(0, 10, "Generated Job Description", ln=True, align="C")
+        
 # Custom CSS for Dark Mode
 def load_css():
     with open("styles.css", "r") as f:
@@ -65,13 +70,21 @@ with tab1:
                 st.success("✅ Job Description Generated:")
              #   st.write(job_desc)
 
-            # Save as PDF
-            
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-            pdf.multi_cell(190, 10, job_desc)
+            pdf.add_font('DejaVu', '', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
+            pdf.set_font('DejaVu', '', 12)
+
+
+            pdf.multi_cell(0, 10, job_desc)  # job_desc is your Unicode markdown output (or clean text version)
+
+# Save
             pdf_file = "job_description.pdf"
             pdf.output(pdf_file)
+            
+            # pdf.add_page()
+            # pdf.set_font("Arial", size=12)
+            # pdf.multi_cell(190, 10, job_desc)
+            # pdf_file = "job_description.pdf"
+            # pdf.output(pdf_file)
         else:
             st.error("⚠️ Please enter a Job Title.")
         if pdf_file != "":
