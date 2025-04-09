@@ -32,6 +32,7 @@ with tab1:
     st.title("📄 Job Description Generator")
     job_title = st.text_input("Enter Job Title (Required)", "")
     # Optional Inputs
+    company = st.text_input("Company (Optional)", "")
     industry = st.text_input("Industry (Optional)", "")
     responsibilities = st.text_area("Key Responsibilities (Optional)", "")
     skills = st.text_area("Required Skills (Optional)", "")
@@ -42,7 +43,7 @@ with tab1:
         if job_title:
             pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
-                job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
+                job_desc = generate_job_description(job_title,company, industry, responsibilities, skills, experience)
                 st.write(job_desc)
         #         st.markdown("""<style>.job-card {
         #     background-color: #ffffff;
