@@ -29,25 +29,25 @@ def generate_job_description(title, industry="", responsibilities="", skills="",
 
 class StyledPDF(FPDF):
     def header(self):
-        self.set_font("Arial", size=12)
+        self.set_font("DejaVu", size=14)
         self.set_text_color(0, 0, 0)
         self.cell(0, 10, "Job Description", ln=True, align="C")
 
 def render_section_header(pdf, title):
     pdf.ln(5)
     pdf.set_text_color(0, 0, 255)  # Blue
-    pdf.set_font("Arial", 'B', 16)
+    pdf.set_font("DejaVu", 'B', 16)
     pdf.cell(0, 10, title, ln=True)
-    pdf.set_text_color(0, 0, 0)  # Reset to black
+    pdf.set_text_color(0, 0, 0)
 
 def render_paragraph(pdf, text):
-    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # Remove markdown bolding for now
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # remove markdown bold
     lines = text.strip().split('\n')
     for line in lines:
         if line.strip() == "":
             pdf.ln(3)
         else:
-            pdf.set_font("Arial", size=12)
+            pdf.set_font("DejaVu", size=12)
             pdf.multi_cell(0, 8, line)
 
 def generate_job_pdf(text, filename="job_description.pdf"):
