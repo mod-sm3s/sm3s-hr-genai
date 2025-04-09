@@ -1,5 +1,5 @@
 import streamlit as st
-from job_description import generate_job_description
+from job_description import generate_job_description, generate_job_pdf
 from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
 import base64
 from fpdf import FPDF
@@ -66,16 +66,23 @@ with tab1:
             #    st.write(job_desc)
 
             # Save as PDF
+              job_desc = generate_job_description(...)  # Your existing function
+
+              pdf_path = generate_job_pdf(job_desc)
+
+              with open(pdf_path, "rb") as f:
+                  st.download_button("📥 Download Formatted Job Description", f, file_name=pdf_path, mime="application/pdf")
+
             
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-            pdf.multi_cell(190, 10, job_desc)
-            pdf_file = "job_description.pdf"
-            pdf.output(pdf_file)
-        else:
-            st.error("⚠️ Please enter a Job Title.")
-        if pdf_file != "":
-            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
+        #     pdf.add_page()
+        #     pdf.set_font("Arial", size=12)
+        #     pdf.multi_cell(190, 10, job_desc)
+        #     pdf_file = "job_description.pdf"
+        #     pdf.output(pdf_file)
+        # else:
+        #     st.error("⚠️ Please enter a Job Title.")
+        # if pdf_file != "":
+        #     st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
         # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
         # st.subheader("📜 Generated Job Description")
         # st.write(jd)
