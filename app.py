@@ -3,9 +3,10 @@ from job_description import generate_job_description
 from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
 import base64
 from fpdf import FPDF
-import os
-import re
-import json
+import pdfkit
+import tempfile
+from jinja2 import Template
+from pathlib import Path
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
 def load_css():
@@ -23,70 +24,89 @@ def add_logo():
 
 add_logo()
 
-class PDF(FPDF):
-    def header(self):
-        self.set_font("DejaVu", size=14)
-        self.cell(0, 10, "Job Description", ln=True, align="C")
-
-def strip_markdown(text):
-    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
-    text = re.sub(r'[^\x00-\x7F]+', '', text)
-    return text.strip()
-
-def create_pdf(data, filename="job_description.pdf"):
-    pdf = PDF()
-    font_path = os.path.join("fonts", "DejaVuSans.ttf")
-    pdf.add_font("DejaVu", "", font_path, uni=True)
-    pdf.set_font("DejaVu", "", 12)
-    pdf.add_page()
-
-    for section, value in data.items():
-        pdf.set_font("DejaVu", "", 12)
-        pdf.multi_cell(0, 10, f"{section}:\n{strip_markdown(value)}\n")
-
-    pdf.output(filename)
-    return filename
-
-
-
-# Custom CSS for Dark Mode
-
-
-# Tabs
 tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
 
 # Job Description Generator UI
 with tab1:
-    st.title("📝 Job Description Generator")
-    pdf_path = ""
+    st.subheader("Generate a Job Description")
+    st.markdown("""
+    Provide the job title (required) and any other optional details. The generator will produce a clean, professional job description with separate sections, similar to [smartera3s.com](https://www.smartera3s.com/).
+    """)
+
     with st.form("job_form"):
-        title = st.text_input("Job Title")
-        industry = st.text_input("Industry (Optional)")
-        responsibilities = st.text_area("Responsibilities  (Optional)")
-        skills = st.text_area("Skills")
-        experience = st.text_input("Minimum Experience (years)  (Optional)")
-        submitted = st.form_submit_button("Generate Description")
+        job_title = st.text_input("Job Title *", placeholder="e.g. Data Scientist")
+        company = st.text_input("Company Name", placeholder="e.g. OpenAI")
+        responsibilities = st.text_area("Responsibilities")
+        qualifications = st.text_area("Qualifications")
+        benefits = st.text_area("Benefits")
+        location = st.text_input("Location", placeholder="e.g. Remote / San Francisco")
+        employment_type = st.selectbox("Employment Type", ["", "Full-time", "Part-time", "Contract", "Internship", "Freelance"])
+
+        submitted = st.form_submit_button("Generate Job Description")
+
+    jd_template = Template("""
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body {
+          font-family: 'Segoe UI', sans-serif;
+          margin: 40px;
+          line-height: 1.6;
+          color: #333;
+        }
+        h2 {
+          color: #1f77b4;
+          border-bottom: 2px solid #eaeaea;
+          padding-bottom: 5px;
+        }
+        .section {
+          margin-bottom: 30px;
+        }
+        strong {
+          color: #000;
+        }
+      </style>
+    </head>
+    <body>
+      <h2>{{ job_title }}</h2>
+      {% if company %}<div class="section"><strong>Company:</strong> {{ company }}</div>{% endif %}
+      {% if responsibilities %}<div class="section"><h3>Responsibilities</h3><p>{{ responsibilities.replace('\n', '<br>') }}</p></div>{% endif %}
+      {% if qualifications %}<div class="section"><h3>Qualifications</h3><p>{{ qualifications.replace('\n', '<br>') }}</p></div>{% endif %}
+      {% if benefits %}<div class="section"><h3>Benefits</h3><p>{{ benefits.replace('\n', '<br>') }}</p></div>{% endif %}
+      {% if location %}<div class="section"><strong>Location:</strong> {{ location }}</div>{% endif %}
+      {% if employment_type %}<div class="section"><strong>Employment Type:</strong> {{ employment_type }}</div>{% endif %}
+    </body>
+    </html>
+    """)
 
     if submitted:
-        with st.spinner("Generating with Gemini..."):
-            data = generate_job_description(title, industry, responsibilities, skills, experience)
-    
-        st.success("✅ Job Description Generated")
-    
-        # Display each section cleanly
-        for section, value in data.items():
-            st.subheader(section)
-            st.write(value)
-    
-        # Create PDF
-        pdf_path = create_pdf(data)
-        with open(pdf_path, "rb") as f:
-            st.download_button("📥 Download PDF", f, file_name=pdf_path, mime="application/pdf")
-    
-    # Streamlit download button
-        with open(pdf_file, "rb") as f:
-            st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
-        # Resume Evaluator UI
+        if not job_title:
+            st.warning("Please enter at least a Job Title.")
+        else:
+            html_content = jd_template.render(
+                job_title=job_title,
+                company=company,
+                responsibilities=responsibilities,
+                qualifications=qualifications,
+                benefits=benefits,
+                location=location,
+                employment_type=employment_type
+            )
+
+            st.markdown("---")
+            st.subheader("📋 Generated Job Description")
+            st.components.v1.html(html_content, height=600, scrolling=True)
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
+                pdfkit.from_string(html_content, tmp_pdf.name)
+                with open(tmp_pdf.name, "rb") as f:
+                    st.download_button(
+                        label="📄 Download PDF",
+                        data=f,
+                        file_name=f"{job_title.replace(' ', '_')}_Job_Description.pdf",
+                        mime="application/pdf"
+                    )
 
 with tab2:
      st.title("📑 Resume Evaluator")
