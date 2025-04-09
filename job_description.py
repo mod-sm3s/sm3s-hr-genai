@@ -29,8 +29,7 @@ def generate_job_description(title, industry="", responsibilities="", skills="",
 
 class StyledPDF(FPDF):
     def header(self):
-        self.add_page()
-        pdf.add_font('DejaVu', '', 'fonts/DejaVuSans.ttf', uni=True)
+        # Removed the add_page() call here
         self.set_font("DejaVu", size=14)
         self.set_text_color(0, 0, 0)
         self.cell(0, 10, "Job Description", ln=True, align="C")
@@ -56,6 +55,9 @@ def generate_job_pdf(text, filename="job_description.pdf"):
     pdf = StyledPDF()
     pdf.add_font('DejaVu', '', 'fonts/DejaVuSans.ttf', uni=True)
 
+    # Explicitly add the first page
+    pdf.add_page()  # Ensure that the page is open at the start
+
     # Extract and render by section
     sections = re.split(r'#\s+<font.*?>(.*?)</font>', text)  # Matches section titles
     content_blocks = []
@@ -73,5 +75,4 @@ def generate_job_pdf(text, filename="job_description.pdf"):
 
     pdf.output(filename)
     return filename
-
 
