@@ -44,7 +44,7 @@ with tab1:
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
              #   st.write(job_desc)
-                st.markdown("""<style>.job-card {
+                st.markdown("""<style>{
             background-color: #ffffff;
             padding: 25px;
             border-radius: 12px;
