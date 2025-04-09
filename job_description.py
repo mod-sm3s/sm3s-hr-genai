@@ -7,6 +7,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
 # # Job Description Generator
 def generate_job_description(title, industry="", responsibilities="", skills="", experience=""):
     base_prompt = f"Generate a professional job description for a {title} position."
+    base_prompt += "Generate the result in well structured format to be similar to this site: https://www.smartera3s.com/"
     base_prompt += "Company name is Smartera"
     base_prompt += ""
     if industry:
