@@ -21,28 +21,19 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
 #     response = llm.invoke([HumanMessage(content=base_prompt)])
 #     return response.content
 
-def generate_job_description(title, industry="", responsibilities="", skills="", experience=""):
-    base_prompt = f"""
-You are a helpful AI assistant. Generate a professional job description in **Markdown format** for a **{title}** position.
-Return **only the formatted job description** — no explanation or intro text. Do NOT include phrases like "Here’s a job description for..." etc.
-
-Use the following structure:
-The company name is **Smartera**.
-{f"The industry is **{industry}**." if industry else ""}
-{f"Responsibilities include: {responsibilities}." if responsibilities else ""}
-{f"Required skills: {skills}." if skills else ""}
-{f"Minimum experience required: {experience} years." if experience else ""}
-
-Break it into the following **Markdown sections**:
-- 📌 Job Title
-- 🏢 Company
-- 🌐 Industry
-- 💼 Responsibilities
-- 🧠 Required Skills
-- 📅 Experience
-- 📝 Full Job Description
-    """.strip()
-
-    response = llm.invoke([HumanMessage(content=base_prompt)])
-    return response.content
+def generate_job_description_structured(title, industry, responsibilities, skills, experience):
+    prompt = f"""
+Return a job description in the following JSON format (no extra text):
+{{
+  "Job Title": "{title}",
+  "Company": "Smartera",
+  "Industry": "{industry}",
+  "Responsibilities": "{responsibilities}",
+  "Skills": "{skills}",
+  "Experience": "{experience} years",
+  "Full Description": "A full professional summary paragraph."
+}}
+    """
+    response = llm.invoke([HumanMessage(content=prompt)])
+    return json.loads(response.content)
 
