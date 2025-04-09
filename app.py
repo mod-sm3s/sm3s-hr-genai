@@ -31,7 +31,6 @@ tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"]
 with tab1:
     st.title("📄 Job Description Generator")
     job_title = st.text_input("Enter Job Title (Required)", "")
-    company = st.text_input("Enter Company name (Required)", "")
     # Optional Inputs
     industry = st.text_input("Industry (Optional)", "")
     responsibilities = st.text_area("Key Responsibilities (Optional)", "")
@@ -43,7 +42,7 @@ with tab1:
         if job_title:
             pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
-                job_desc = generate_job_description(job_title,company, industry, responsibilities, skills, experience)
+                job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
                 st.markdown("""<style>.job-card {
             background-color: #ffffff;
             padding: 25px;
@@ -76,7 +75,7 @@ with tab1:
             st.error("⚠️ Please enter a Job Title.")
         if pdf_file != "":
             st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
-        # jd = generate_job_description(job_title,company, industry, responsibilities, skills, experience)
+        # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
         # st.subheader("📜 Generated Job Description")
         # st.write(jd)
 
