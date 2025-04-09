@@ -60,15 +60,15 @@ with tab1:
     pdf_path = ""
     with st.form("job_form"):
         title = st.text_input("Job Title")
-        industry = st.text_input("Industry")
-        responsibilities = st.text_area("Responsibilities")
+        industry = st.text_input("Industry"  (Optional))
+        responsibilities = st.text_area("Responsibilities"  (Optional))
         skills = st.text_area("Skills")
-        experience = st.text_input("Minimum Experience (years)")
+        experience = st.text_input("Minimum Experience (years)  (Optional)")
         submitted = st.form_submit_button("Generate Description")
 
     if submitted:
         with st.spinner("Generating with Gemini..."):
-            data = generate_job_description_structured(title, industry, responsibilities, skills, experience)
+            data = generate_job_description(title, industry, responsibilities, skills, experience)
     
         st.success("✅ Job Description Generated")
     
