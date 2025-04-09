@@ -29,6 +29,7 @@ def generate_job_description(title, industry="", responsibilities="", skills="",
 
 class StyledPDF(FPDF):
     def header(self):
+        pdf.add_page()
         pdf.add_font('DejaVu', '', 'fonts/DejaVuSans.ttf', uni=True)
         self.set_font("DejaVu", size=14)
         self.set_text_color(0, 0, 0)
