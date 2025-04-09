@@ -20,9 +20,8 @@ def load_css():
 load_css()
 
 # Logo
-def add_logo():
-   # logo_path = "logo.png"  
-    logo_path = "sm3s-logo.jpeg"
+def add_logo(): 
+    logo_path = "smartera-logo-2.png"
     with open(logo_path, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
     st.markdown(f"<img src='data:image/png;base64,{encoded}' class='logo'>", unsafe_allow_html=True)
