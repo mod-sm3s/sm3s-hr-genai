@@ -5,6 +5,7 @@ import base64
 from fpdf import FPDF
 import os
 import re
+import json
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
 def load_css():
