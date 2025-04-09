@@ -63,7 +63,7 @@ with tab1:
         industry = st.text_input("Industry")
         responsibilities = st.text_area("Responsibilities")
         skills = st.text_area("Skills")
-        experience = st.number_input("Minimum Experience (years)")
+        experience = st.text_area("Minimum Experience (years)")
         submitted = st.form_submit_button("Generate Description")
 
     if submitted:
