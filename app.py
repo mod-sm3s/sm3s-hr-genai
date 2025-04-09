@@ -53,9 +53,7 @@ with tab1:
             font-family: 'Segoe UI', sans-serif;
             color: #333;
         }
-        .job-card h2 {
-            color: #0a9396;
-        }
+        
         </style> """, unsafe_allow_html=True)
 
 
