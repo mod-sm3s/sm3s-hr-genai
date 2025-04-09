@@ -59,11 +59,11 @@ with tab1:
     st.title("📝 Job Description Generator")
 
 with st.form("job_form"):
-    title = st.text_input("Job Title", value="AI Engineer")
-    industry = st.text_input("Industry", value="FinTech")
-    responsibilities = st.text_area("Responsibilities", value="Build AI models, collaborate with cross-functional teams")
-    skills = st.text_area("Skills", value="Python, TensorFlow, NLP")
-    experience = st.number_input("Minimum Experience (years)", min_value=0, step=1, value=2)
+    title = st.text_input("Job Title")
+    industry = st.text_input("Industry")
+    responsibilities = st.text_area("Responsibilities")
+    skills = st.text_area("Skills")
+    experience = st.number_input("Minimum Experience (years)")
     submitted = st.form_submit_button("Generate Description")
 
 if submitted:
