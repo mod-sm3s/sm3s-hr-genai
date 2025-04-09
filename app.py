@@ -7,34 +7,6 @@ import os
 import re
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
-class PDF(FPDF):
-    def header(self):
-        self.set_font("DejaVu", size=14)
-        self.cell(0, 10, "Job Description", ln=True, align="C")
-
-# Strip markdown and emojis
-def clean_text(text):
-    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # Remove bold markers
-    text = re.sub(r'[^\x00-\x7F]+', '', text)     # Strip emojis/special
-    return text.strip()
-
-# PDF generation
-pdf = PDF()
-pdf.add_page()
-
-font_path = os.path.join("fonts", "DejaVuSans.ttf")  # Include font in your repo
-pdf.add_font("DejaVu", "", font_path, uni=True)
-pdf.set_font("DejaVu", "", 12)
-
-pdf.multi_cell(0, 10, clean_text(job_desc))
-
-pdf_file = "job_description.pdf"
-pdf.output(pdf_file)
-
-# Streamlit download button
-with open(pdf_file, "rb") as f:
-    st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
-# Custom CSS for Dark Mode
 def load_css():
     with open("styles.css", "r") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -50,63 +22,69 @@ def add_logo():
 
 add_logo()
 
+class PDF(FPDF):
+    def header(self):
+        self.set_font("DejaVu", size=14)
+        self.cell(0, 10, "Job Description", ln=True, align="C")
+
+def strip_markdown(text):
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+    text = re.sub(r'[^\x00-\x7F]+', '', text)
+    return text.strip()
+
+def create_pdf(data, filename="job_description.pdf"):
+    pdf = PDF()
+    font_path = os.path.join("fonts", "DejaVuSans.ttf")
+    pdf.add_font("DejaVu", "", font_path, uni=True)
+    pdf.set_font("DejaVu", "", 12)
+    pdf.add_page()
+
+    for section, value in data.items():
+        pdf.set_font("DejaVu", "", 12)
+        pdf.multi_cell(0, 10, f"{section}:\n{strip_markdown(value)}\n")
+
+    pdf.output(filename)
+    return filename
+
+
+
+# Custom CSS for Dark Mode
+
+
 # Tabs
 tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
 
 # Job Description Generator UI
 with tab1:
-    st.title("📄 Job Description Generator")
-    job_title = st.text_input("Enter Job Title (Required)", "")
+    st.title("📝 Job Description Generator")
 
-    # Optional Inputs
-    industry = st.text_input("Industry (Optional)", "")
-    responsibilities = st.text_area("Key Responsibilities (Optional)", "")
-    skills = st.text_area("Required Skills (Optional)", "")
-    experience = st.text_input("Years of Experience (Optional)", "")
+with st.form("job_form"):
+    title = st.text_input("Job Title", value="AI Engineer")
+    industry = st.text_input("Industry", value="FinTech")
+    responsibilities = st.text_area("Responsibilities", value="Build AI models, collaborate with cross-functional teams")
+    skills = st.text_area("Skills", value="Python, TensorFlow, NLP")
+    experience = st.number_input("Minimum Experience (years)", min_value=0, step=1, value=2)
+    submitted = st.form_submit_button("Generate Description")
 
-    pdf_file = ""
-    if st.button("Generate Job Description"):
-        if job_title:
-            pdf = FPDF()
-            with st.spinner("Wait for it...", show_time=True):
-                job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
-                st.markdown("""
-                <style>
-                    h2 {color: #1E90FF !important; /* DodgerBlue *}
-                </style>
-                """, unsafe_allow_html=True)
-                st.markdown(job_desc, unsafe_allow_html=True)
+if submitted:
+    with st.spinner("Generating with Gemini..."):
+        data = generate_job_description_structured(title, industry, responsibilities, skills, experience)
 
+    st.success("✅ Job Description Generated")
 
-                st.markdown('<div class="job-card">', unsafe_allow_html=True)
-                st.markdown(job_desc, unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-                st.success("✅ Job Description Generated:")
-             #   st.write(job_desc)
+    # Display each section cleanly
+    for section, value in data.items():
+        st.subheader(section)
+        st.write(value)
 
-            pdf.add_font('DejaVu', '', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
-            pdf.set_font('DejaVu', '', 12)
+    # Create PDF
+    pdf_path = create_pdf(data)
+    with open(pdf_path, "rb") as f:
+        st.download_button("📥 Download PDF", f, file_name=pdf_path, mime="application/pdf")
 
-
-          #  pdf.multi_cell(0, 10, job_desc)  # job_desc is your Unicode markdown output (or clean text version)
-
-# Save
-            pdf_file = "job_description.pdf"
-            pdf.output(pdf_file)
-            
-            # pdf.add_page()
-            # pdf.set_font("Arial", size=12)
-            # pdf.multi_cell(190, 10, job_desc)
-            # pdf_file = "job_description.pdf"
-            # pdf.output(pdf_file)
-        else:
-            st.error("⚠️ Please enter a Job Title.")
-        if pdf_file != "":
-            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
-        # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
-        # st.subheader("📜 Generated Job Description")
-        # st.write(jd)
-
+# Streamlit download button
+with open(pdf_file, "rb") as f:
+    st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
 # Resume Evaluator UI
 
 with tab2:
