@@ -34,8 +34,8 @@ with tab1:
     """)
 
     with st.form("job_form"):
-        job_title = st.text_input("Job Title *", placeholder="e.g. Data Scientist")
-        company = st.text_input("Company Name", placeholder="e.g. OpenAI")
+        job_title = st.text_input("Job Title *")
+     #   company = st.text_input("Company Name")
         responsibilities = st.text_area("Responsibilities")
         qualifications = st.text_area("Qualifications")
         benefits = st.text_area("Benefits")
