@@ -3,12 +3,11 @@ from job_description import generate_job_description
 from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
 import base64
 from fpdf import FPDF
-import pdfkit
-import tempfile
-from jinja2 import Template
-from pathlib import Path
+
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
+
+# Custom CSS for Dark Mode
 def load_css():
     with open("styles.css", "r") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -16,112 +15,72 @@ def load_css():
 load_css()
 
 # Logo
-def add_logo(): 
-    logo_path = "logo-sm.png"
+def add_logo():
+   # logo_path = "logo.png"  
+    logo_path = "sm3s-logo.jpeg"
     with open(logo_path, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
     st.markdown(f"<img src='data:image/png;base64,{encoded}' class='logo'>", unsafe_allow_html=True)
 
 add_logo()
 
+# Tabs
 tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
 
 # Job Description Generator UI
 with tab1:
-    st.subheader("Generate a Job Description")
-    st.markdown("""
-    Provide the job title (required) and any other optional details. The generator will produce a clean, professional job description with separate sections, similar to [smartera3s.com](https://www.smartera3s.com/).
-    """)
+    st.title("📄 Job Description Generator")
+    job_title = st.text_input("Enter Job Title (Required)", "")
 
-    with st.form("job_form"):
-        job_title = st.text_input("Job Title *")
-     #   company = st.text_input("Company Name")
-        responsibilities = st.text_area("Responsibilities")
-        qualifications = st.text_area("Qualifications")
-        benefits = st.text_area("Benefits")
-        location = st.text_input("Location", placeholder="e.g. Remote / San Francisco")
-        employment_type = st.selectbox("Employment Type", ["", "Full-time", "Part-time", "Contract", "Internship", "Freelance"])
+    # Optional Inputs
+    industry = st.text_input("Industry (Optional)", "")
+    responsibilities = st.text_area("Key Responsibilities (Optional)", "")
+    skills = st.text_area("Required Skills (Optional)", "")
+    experience = st.text_input("Years of Experience (Optional)", "")
 
-        submitted = st.form_submit_button("Generate Job Description")
-
-    jd_template = Template("""
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        body {
-          font-family: 'Segoe UI', sans-serif;
-          margin: 40px;
-          line-height: 1.6;
-          color: #333;
+    pdf_file = ""
+    if st.button("Generate Job Description"):
+        if job_title:
+            pdf = FPDF()
+            with st.spinner("Wait for it...", show_time=True):
+                job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
+                st.markdown("""<style>.job-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+            margin-top: 20px;
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
         }
-        h2 {
-          color: #1f77b4;
-          border-bottom: 2px solid #eaeaea;
-          padding-bottom: 5px;
+        .job-card h2 {
+            color: #0a9396;
         }
-        .section {
-          margin-bottom: 30px;
-        }
-        strong {
-          color: #000;
-        }
-      </style>
-    </head>
-    <body>
-      Generate a professional job description for the role: "{{ job_title }}".
+        </style> """, unsafe_allow_html=True)
 
-        {% if company %}
-        The company name is {{ company }}.
-        {% endif %}
-        {% if responsibilities %}
-        Here are some suggested responsibilities: {{ responsibilities }}.
-        {% endif %}
-        {% if qualifications %}
-        Here are some suggested qualifications: {{ qualifications }}.
-        {% endif %}
-        {% if benefits %}
-        These are the benefits offered: {{ benefits }}.
-        {% endif %}
-        {% if location %}
-        The position is located at: {{ location }}.
-        {% endif %}
-        {% if employment_type %}
-        This is a {{ employment_type }} role.
-        {% endif %}
 
-Please format the output with clearly separated sections and use a visually appealing layout.
+                st.markdown('<div class="job-card">', unsafe_allow_html=True)
+                st.markdown(job_desc, unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+                st.success("✅ Job Description Generated:")
+                st.write(job_desc)
 
-    </body>
-    </html>
-    """)
-
-    if submitted:
-        if not job_title:
-            st.warning("Please enter at least a Job Title.")
+            # Save as PDF
+            
+            pdf.add_page()
+            pdf.set_font("Arial", size=12)
+            pdf.multi_cell(190, 10, job_desc)
+            pdf_file = "job_description.pdf"
+            pdf.output(pdf_file)
         else:
-            html_content = jd_template.render(
-                job_title=job_title,
-                responsibilities=responsibilities,
-                qualifications=qualifications,
-                benefits=benefits,
-                location=location,
-                employment_type=employment_type
-            )
+            st.error("⚠️ Please enter a Job Title.")
+        if pdf_file != "":
+            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
+        # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
+        # st.subheader("📜 Generated Job Description")
+        # st.write(jd)
 
-            st.markdown("---")
-            st.subheader("📋 Generated Job Description")
-            st.components.v1.html(html_content, height=600, scrolling=True)
-
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
-                pdfkit.from_string(html_content, tmp_pdf.name)
-                with open(tmp_pdf.name, "rb") as f:
-                    st.download_button(
-                        label="📄 Download PDF",
-                        data=f,
-                        file_name=f"{job_title.replace(' ', '_')}_Job_Description.pdf",
-                        mime="application/pdf"
-                    )
+# Resume Evaluator UI
 
 with tab2:
      st.title("📑 Resume Evaluator")
@@ -154,5 +113,3 @@ with tab2:
            #  st.subheader("📊 Skill Match Results")
              # for skill, status in skill_comparison.items():
              #     st.write(f"**{skill.capitalize()}**: {status}")
-
-
