@@ -63,7 +63,7 @@ with tab1:
                 st.markdown(job_desc, unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
                 st.success("✅ Job Description Generated:")
-                st.write(job_desc)
+            #    st.write(job_desc)
 
             # Save as PDF
             
