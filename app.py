@@ -9,7 +9,7 @@ st.set_page_config(page_title="HR AI Assistant", layout="wide")
 
 class PDF(FPDF):
     def header(self):
-        self.set_font("DejaVu", size=12)
+        self.set_font("DAriel", size=12)
         self.cell(0, 10, "Generated Job Description", ln=True, align="C")
         
 # Custom CSS for Dark Mode
