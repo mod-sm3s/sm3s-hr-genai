@@ -30,7 +30,7 @@ def generate_job_description(title, industry="", responsibilities="", skills="",
 class StyledPDF(FPDF):
     def header(self):
         # Removed the add_page() call here
-        self.set_font("DejaVu", size=14)
+        self.set_font("DejaVuSans", "", "fonts/DejavuSans.ttf", size=14)
         self.set_text_color(0, 0, 0)
         self.cell(0, 10, "Job Description", ln=True, align="C")
 
