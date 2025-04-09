@@ -60,8 +60,8 @@ with tab1:
     pdf_path = ""
     with st.form("job_form"):
         title = st.text_input("Job Title")
-        industry = st.text_input("Industry"  (Optional))
-        responsibilities = st.text_area("Responsibilities"  (Optional))
+        industry = st.text_input("Industry (Optional)")
+        responsibilities = st.text_area("Responsibilities  (Optional)")
         skills = st.text_area("Skills")
         experience = st.text_input("Minimum Experience (years)  (Optional)")
         submitted = st.form_submit_button("Generate Description")
