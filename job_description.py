@@ -54,6 +54,7 @@ def render_paragraph(pdf, text):
 
 def generate_job_pdf(text, filename="job_description.pdf"):
     pdf = StyledPDF()
+    pdf.add_page()
     pdf.add_font('DejaVu', '', 'fonts/DejaVuSans.ttf', uni=True)
 
     # Extract and render by section
