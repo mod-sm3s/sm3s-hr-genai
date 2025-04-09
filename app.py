@@ -7,11 +7,6 @@ from fpdf import FPDF
 # Page Configuration
 st.set_page_config(page_title="HR AI Assistant", layout="wide")
 
-class PDF(FPDF):
-    def header(self):
-        self.set_font("DAriel", size=12)
-        self.cell(0, 10, "Generated Job Description", ln=True, align="C")
-        
 # Custom CSS for Dark Mode
 def load_css():
     with open("styles.css", "r") as f:
@@ -45,7 +40,7 @@ with tab1:
     pdf_file = ""
     if st.button("Generate Job Description"):
         if job_title:
-            pdf = PDF()
+            pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
                 st.markdown("""<style>.job-card {
@@ -58,7 +53,7 @@ with tab1:
             color: #333;
         }
         .job-card h2 {
-            color: #1E90FF;
+            color: blue;
         }
         </style> """, unsafe_allow_html=True)
 
