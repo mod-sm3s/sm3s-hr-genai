@@ -45,7 +45,7 @@ with tab1:
     pdf_file = ""
     if st.button("Generate Job Description"):
         if job_title:
-            pdf = FPDF()
+            pdf = PDF()
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
                 st.markdown("""<style>.job-card {
