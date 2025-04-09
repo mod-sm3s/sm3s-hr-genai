@@ -74,7 +74,7 @@ with tab1:
             pdf.set_font('DejaVu', '', 12)
 
 
-            pdf.multi_cell(0, 10, job_desc)  # job_desc is your Unicode markdown output (or clean text version)
+          #  pdf.multi_cell(0, 10, job_desc)  # job_desc is your Unicode markdown output (or clean text version)
 
 # Save
             pdf_file = "job_description.pdf"
