@@ -58,34 +58,34 @@ tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"]
 with tab1:
     st.title("📝 Job Description Generator")
     pdf_path = ""
-with st.form("job_form"):
-    title = st.text_input("Job Title")
-    industry = st.text_input("Industry")
-    responsibilities = st.text_area("Responsibilities")
-    skills = st.text_area("Skills")
-    experience = st.number_input("Minimum Experience (years)")
-    submitted = st.form_submit_button("Generate Description")
+    with st.form("job_form"):
+        title = st.text_input("Job Title")
+        industry = st.text_input("Industry")
+        responsibilities = st.text_area("Responsibilities")
+        skills = st.text_area("Skills")
+        experience = st.number_input("Minimum Experience (years)")
+        submitted = st.form_submit_button("Generate Description")
 
-if submitted:
-    with st.spinner("Generating with Gemini..."):
-        data = generate_job_description_structured(title, industry, responsibilities, skills, experience)
-
-    st.success("✅ Job Description Generated")
-
-    # Display each section cleanly
-    for section, value in data.items():
-        st.subheader(section)
-        st.write(value)
-
-    # Create PDF
-    pdf_path = create_pdf(data)
-    with open(pdf_path, "rb") as f:
-        st.download_button("📥 Download PDF", f, file_name=pdf_path, mime="application/pdf")
-
-# Streamlit download button
-with open(pdf_file, "rb") as f:
-    st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
-# Resume Evaluator UI
+    if submitted:
+        with st.spinner("Generating with Gemini..."):
+            data = generate_job_description_structured(title, industry, responsibilities, skills, experience)
+    
+        st.success("✅ Job Description Generated")
+    
+        # Display each section cleanly
+        for section, value in data.items():
+            st.subheader(section)
+            st.write(value)
+    
+        # Create PDF
+        pdf_path = create_pdf(data)
+        with open(pdf_path, "rb") as f:
+            st.download_button("📥 Download PDF", f, file_name=pdf_path, mime="application/pdf")
+    
+    # Streamlit download button
+    with open(pdf_file, "rb") as f:
+        st.download_button("📥 Download Job Description PDF", f, file_name=pdf_file, mime="application/pdf")
+    # Resume Evaluator UI
 
 with tab2:
      st.title("📑 Resume Evaluator")
