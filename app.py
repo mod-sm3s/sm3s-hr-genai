@@ -44,7 +44,7 @@ with tab1:
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
              #   st.write(job_desc)
-                st.markdown("""<style>{
+                st.markdown("""<style> {
             background-color: #ffffff;
             padding: 25px;
             border-radius: 12px;
@@ -62,7 +62,7 @@ with tab1:
                 st.markdown('<div class="job-card">', unsafe_allow_html=True)
                 st.markdown(job_desc, unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
-               st.success("✅ Job Description Generated:")
+                st.success("✅ Job Description Generated:")
             #    st.write(job_desc)
 
             # Save as PDF
