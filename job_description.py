@@ -21,7 +21,7 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
 #     response = llm.invoke([HumanMessage(content=base_prompt)])
 #     return response.content
 
-def generate_job_description_structured(title, industry, responsibilities, skills, experience):
+def generate_job_description(title, industry, responsibilities, skills, experience):
     prompt = f"""
 Return a job description in the following JSON format (no extra text):
 {{
