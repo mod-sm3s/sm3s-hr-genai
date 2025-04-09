@@ -44,6 +44,24 @@ with tab1:
             pdf = FPDF()
             with st.spinner("Wait for it...", show_time=True):
                 job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
+                st.markdown("""<style>.job-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+            margin-top: 20px;
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
+        }
+        .job-card h2 {
+            color: #0a9396;
+        }
+        </style> """, unsafe_allow_html=True)
+
+
+                st.markdown('<div class="job-card">', unsafe_allow_html=True)
+                st.markdown(job_desc, unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
                 st.success("✅ Job Description Generated:")
                 st.write(job_desc)
 
