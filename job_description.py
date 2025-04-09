@@ -24,8 +24,3 @@ def generate_job_description(title, industry="", responsibilities="", skills="",
 
     response = llm.invoke([HumanMessage(content=base_prompt)])
     return response.content
-
-
-
-
-
