@@ -69,12 +69,29 @@ with tab1:
       </style>
     </head>
     <body>
-      <h2>{{ job_title }}</h2>
-      {% if responsibilities %}<div class="section"><h3>Responsibilities</h3><p>{{ responsibilities.replace('\n', '<br>') }}</p></div>{% endif %}
-      {% if qualifications %}<div class="section"><h3>Qualifications</h3><p>{{ qualifications.replace('\n', '<br>') }}</p></div>{% endif %}
-      {% if benefits %}<div class="section"><h3>Benefits</h3><p>{{ benefits.replace('\n', '<br>') }}</p></div>{% endif %}
-      {% if location %}<div class="section"><strong>Location:</strong> {{ location }}</div>{% endif %}
-      {% if employment_type %}<div class="section"><strong>Employment Type:</strong> {{ employment_type }}</div>{% endif %}
+      Generate a professional job description for the role: "{{ job_title }}".
+
+        {% if company %}
+        The company name is {{ company }}.
+        {% endif %}
+        {% if responsibilities %}
+        Here are some suggested responsibilities: {{ responsibilities }}.
+        {% endif %}
+        {% if qualifications %}
+        Here are some suggested qualifications: {{ qualifications }}.
+        {% endif %}
+        {% if benefits %}
+        These are the benefits offered: {{ benefits }}.
+        {% endif %}
+        {% if location %}
+        The position is located at: {{ location }}.
+        {% endif %}
+        {% if employment_type %}
+        This is a {{ employment_type }} role.
+        {% endif %}
+
+Please format the output with clearly separated sections and use a visually appealing layout.
+
     </body>
     </html>
     """)
