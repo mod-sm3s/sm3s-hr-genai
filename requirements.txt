@@ -4,7 +4,7 @@ langchain_community
 langchain-google-genai
 google-generativeai
 PyMuPDF  
-fdpf2
+fpdf2==2.7.8
 python-dotenv  
 langchain-google-vertexai
 pypdf2
