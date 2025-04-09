@@ -35,5 +35,5 @@ Return a job description in the following JSON format (no extra text):
 }}
     """
     response = llm.invoke([HumanMessage(content=prompt)])
-    return json.loads(response.content)
+    return response.content
 
