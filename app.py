@@ -57,7 +57,7 @@ tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"]
 # Job Description Generator UI
 with tab1:
     st.title("📝 Job Description Generator")
-
+     pdf_path = ""
 with st.form("job_form"):
     title = st.text_input("Job Title")
     industry = st.text_input("Industry")
