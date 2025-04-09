@@ -13,6 +13,7 @@ def generate_job_description(title, industry="", responsibilities="", skills="",
     base_prompt += "Return **only the formatted job description** — no explanation or intro text. Do NOT include phrases like 'Here’s a job description for...' etc."
     base_prompt += "Do not return the Company name Smartera at the beginning of the result"
     base_prompt += "Do not generate any html elements  "
+    base_prompt += "Make sections separate and aligned"
    
     if industry:
         base_prompt += f" The industry is {industry}."
