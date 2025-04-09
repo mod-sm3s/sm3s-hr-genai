@@ -70,7 +70,6 @@ with tab1:
     </head>
     <body>
       <h2>{{ job_title }}</h2>
-      {% if company %}<div class="section"><strong>Company:</strong> {{ company }}</div>{% endif %}
       {% if responsibilities %}<div class="section"><h3>Responsibilities</h3><p>{{ responsibilities.replace('\n', '<br>') }}</p></div>{% endif %}
       {% if qualifications %}<div class="section"><h3>Qualifications</h3><p>{{ qualifications.replace('\n', '<br>') }}</p></div>{% endif %}
       {% if benefits %}<div class="section"><h3>Benefits</h3><p>{{ benefits.replace('\n', '<br>') }}</p></div>{% endif %}
