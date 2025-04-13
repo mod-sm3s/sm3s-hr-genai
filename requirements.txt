@@ -6,8 +6,5 @@ google-generativeai
 PyMuPDF 
 python-dotenv  
 langchain-google-vertexai
-pdfkit
-jinja2
-wkhtmltopdf
 pypdf2
 fpdf
