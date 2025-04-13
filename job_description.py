@@ -1,6 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import HumanMessage
-from fpdf import FPDF
 import os
 import re
 # Initialize Gemini 2.0 Flash Model
