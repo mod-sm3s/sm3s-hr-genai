@@ -10,3 +10,4 @@ pdfkit
 jinja2
 wkhtmltopdf
 pypdf2
+fpdf
