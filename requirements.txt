@@ -9,3 +9,4 @@ langchain-google-vertexai
 pdfkit
 jinja2
 wkhtmltopdf
+pypdf
