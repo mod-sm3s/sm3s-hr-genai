@@ -4,7 +4,6 @@ langchain_community
 langchain-google-genai
 google-generativeai
 PyMuPDF 
-PyMuPDF2
 python-dotenv  
 langchain-google-vertexai
 pdfkit
