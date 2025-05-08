@@ -1,113 +1,78 @@
+import os
+import re
+import csv
+import shutil
+import tempfile
 import streamlit as st
-from job_description import generate_job_description
-from resume_evaluator import resume_description, resume_score, extract_text_from_pdf
-import base64
-from fpdf import FPDF
+import PyPDF2
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.schema import HumanMessage
 
-# Page Configuration
-st.set_page_config(page_title="HR AI Assistant", layout="wide")
+# Initialize Gemini 2.0 Flash Model
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
 
-# Custom CSS for Dark Mode
-def load_css():
-    with open("styles.css", "r") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+# Extract text from PDF file
+def extract_text_from_pdf(pdf_file):
+    text = ""
+    reader = PyPDF2.PdfReader(pdf_file)
+    for page in reader.pages:
+        text += page.extract_text() + "\n"
+    return text
 
-load_css()
+# Extract name (from filename), email, and phone number
+def extract_info(text, file_name):
+    name = os.path.splitext(file_name)[0].replace("_", " ").title()
+    email_match = re.search(r'[\w\.-]+@[\w\.-]+', text)
+    phone_match = re.search(r'(\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}', text)
 
-# Logo
-def add_logo():
-   # logo_path = "logo.png"  
-    logo_path = "logo-sm.png"
-    with open(logo_path, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode()
-    st.markdown(f"<img src='data:image/png;base64,{encoded}' class='logo'>", unsafe_allow_html=True)
+    email = email_match.group(0) if email_match else "Not found"
+    phone = phone_match.group(0) if phone_match else "Not found"
+    return name, email, phone
 
-add_logo()
+# Get score from Gemini based on resume vs job description
+def get_resume_score(jd_text, resume_text):
+    prompt = (
+        f"Evaluate the candidate's resume against the job description below.\n\n"
+        f"Job Description:\n{jd_text}\n\n"
+        f"Resume:\n{resume_text}\n\n"
+        f"Give a score out of 100 for how well this candidate fits the job. Just return the score number only."
+    )
+    response = llm.invoke([HumanMessage(content=prompt)])
+    try:
+        score = int(re.search(r'\d+', response.content).group())
+        return min(score, 100)
+    except:
+        return 0
 
-# Tabs
-tab1, tab2 = st.tabs(["📄 Job Description Generator", "📑 Resume Evaluator"])
+# Streamlit App
+st.title("Resume Evaluator 📄✨")
 
-# Job Description Generator UI
-with tab1:
-    st.title("📄 Job Description Generator")
-    job_title = st.text_input("Enter Job Title (Required)", "")
-    # Optional Inputs
-    industry = st.text_input("Industry (Optional)", "")
-    responsibilities = st.text_area("Key Responsibilities (Optional)", "")
-    skills = st.text_area("Required Skills (Optional)", "")
-    experience = st.text_input("Years of Experience (Optional)", "")
+# File uploads
+jd_file = st.file_uploader("Upload Job Description (PDF)", type=["pdf"])
+resume_files = st.file_uploader("Upload Resumes (multiple PDFs)", type=["pdf"], accept_multiple_files=True)
 
-    pdf_file = ""
-    if st.button("Generate Job Description"):
-        if job_title:
-            pdf = FPDF()
-            with st.spinner("Wait for it...", show_time=True):
-                job_desc = generate_job_description(job_title, industry, responsibilities, skills, experience)
-             #   st.write(job_desc)
-                st.markdown("""<style> {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
-            margin-top: 20px;
-            font-family: 'Segoe UI', sans-serif;
-            color: #333;
-        }
-        
-        </style> """, unsafe_allow_html=True)
+if jd_file and resume_files:
+    if st.button("Evaluate Resumes"):
+        with st.spinner("Processing..."):
 
+            jd_text = extract_text_from_pdf(jd_file)
+            results = []
 
-                st.markdown('<div class="job-card">', unsafe_allow_html=True)
-                st.markdown(job_desc, unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-                st.success("✅ Job Description Generated:")
-            #    st.write(job_desc)
+            for resume in resume_files:
+                resume_text = extract_text_from_pdf(resume)
+                name, email, phone = extract_info(resume_text, resume.name)
+                score = get_resume_score(jd_text, resume_text)
+                results.append([name, email, phone, score])
 
-            # Save as PDF
-            
-            pdf.add_page()
-            pdf.set_font("Arial", size=12)
-            pdf.multi_cell(190, 10, job_desc)
-            pdf_file = "job_description.pdf"
-            pdf.output(pdf_file)
-        else:
-            st.error("⚠️ Please enter a Job Title.")
-        if pdf_file != "":
-            st.download_button("Download PDF", data=open(pdf_file, "rb"), file_name=pdf_file, mime="application/pdf")
-        # jd = generate_job_description(job_title, industry, responsibilities, skills, experience)
-        # st.subheader("📜 Generated Job Description")
-        # st.write(jd)
+            # Sort by score descending
+            results.sort(key=lambda x: x[3], reverse=True)
 
-# Resume Evaluator UI
+            # Save to CSV
+            csv_path = os.path.join(tempfile.gettempdir(), "resume_scores.csv")
+            with open(csv_path, "w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Name", "Email", "Mobile", "Score"])
+                writer.writerows(results)
 
-with tab2:
-     st.title("📑 Resume Evaluator")
-     uploaded_job_desc = st.file_uploader("📄 Upload Job Description PDF", type="pdf")
-     uploaded_resume = st.file_uploader("📄 Upload Resume PDF", type="pdf")
-     inside_tab1, inside_tab2 = st.tabs(["📑 Resume Evaluator Description", "📑 Resume Evaluator Score"])
-     with inside_tab1:
-         if uploaded_job_desc and uploaded_resume:
-             job_desc_text = extract_text_from_pdf(uploaded_job_desc)
-             resume_text = extract_text_from_pdf(uploaded_resume)
-             with st.spinner("Wait for it...", show_time=True):
-                 desc = resume_description(job_desc_text, resume_text)
-                 st.subheader("📊 Skill Descriptions")
-                 st.write(desc)
-                 st.success("Done!")
- 
-     with inside_tab2:
-         if uploaded_job_desc and uploaded_resume:
-             job_desc_text = extract_text_from_pdf(uploaded_job_desc)
-             resume_text = extract_text_from_pdf(uploaded_resume)           
-             skill_comparison = resume_score(job_desc_text, resume_text)
-             matched_skills = [skill for skill, status in skill_comparison.items() if "Yes" in status]
-             missing_skills = [skill for skill, status in skill_comparison.items() if "No" in status]
-             st.markdown("<h3>✅ Matched Skills</h3>", unsafe_allow_html=True)
-             st.markdown('<div class="skill-box">' + ''.join(f'<span class="skill-tag matched">{skill}</span>' for skill in matched_skills) + '</div>', unsafe_allow_html=True)
-             st.markdown("<h3>❌ Missing Skills</h3>", unsafe_allow_html=True)
-             st.markdown('<div class="skill-box">' + ''.join(
-    f'<span class="skill-tag missing">{skill}</span>' for skill in missing_skills
-) + '</div>', unsafe_allow_html=True)
-           #  st.subheader("📊 Skill Match Results")
-             # for skill, status in skill_comparison.items():
-             #     st.write(f"**{skill.capitalize()}**: {status}")
+            st.success("Evaluation complete!")
+            st.download_button("Download CSV", data=open(csv_path, "rb"), file_name="resume_scores.csv", mime="text/csv")
