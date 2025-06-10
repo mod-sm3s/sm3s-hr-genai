@@ -1,56 +1,84 @@
-from crewai import Agent, Crew, Task
-from mysql_connector import sql_tool
-from crewai.tools import tool
-from job_description import generate_job_description, llm
+# graph_agent.py
 
+from langgraph.graph import StateGraph, END
+from typing import TypedDict, Optional
+from job_description import generate_job_description
+from mysql_connector import db_chain
 
-llm = llm
+# Define the structure passed between nodes
+class AgentState(TypedDict, total=False):
+    job_title: str
+    years_experience: Optional[str]
+    skills: Optional[str]
+    description: Optional[str]
+    industry: Optional[str]
+    job_description: str
+    query_results: str
 
+# Step 1: Generate Job Description
+def node_generate_description(state: AgentState) -> AgentState:
+    jd = generate_job_description(
+        job_title=state["job_title"],
+        years_experience=state.get("years_experience"),
+        skills=state.get("skills"),
+        description=state.get("description"),
+        industry=state.get("industry"),
+    )
+    return {**state, "job_description": jd}
 
-@tool("Employee SQL Query Tool")
-def query_employee_data(query: str) -> str:
-    """Executes a SQL query to retrieve employee data."""
-    return sql_tool.run(query)
-db_agent = Agent(
-    role="HR Database Analyst",
-    goal="Identify suitable employees from the database based on job requirements",
-    backstory="You are an expert HR analyst with access to employee data stored in a MySQL database. You help HR teams find the best candidates internally.",
-    tools=[sql_tool],
-    llm=llm,
-    verbose=True,
-)
+# Step 2: Query Internal Employee DB
+# def node_query_database(state: AgentState) -> AgentState:
+#     prompt = f"""
+# Find all employees in the database whose skills and experience match the following job description:
 
-def build_query_from_job_description(job_description: str) -> str:
-    return f"""
-SELECT * FROM employees
-WHERE MATCH(skills) AGAINST('{job_description}' IN NATURAL LANGUAGE MODE)
-   OR MATCH(position, department) AGAINST('{job_description}' IN NATURAL LANGUAGE MODE)
-   OR years_experience >= 2;
- """
-job_description = generate_job_description(job_title="software engineer")
-sql_query = build_query_from_job_description(job_description)
+# \"\"\"{state['job_description']}\"\"\"
 
-match_task = Task(
-    description=f"Run the following SQL query using the QuerySQLDataBaseTool:\n\n{sql_query}",
-    expected_output="A list of employee names, emails, and positions who match the given skills (Python, SQL, data analysis).",
-    agent=db_agent
-)
-# task = Task(
-#     description="Find employees who match the following job requirements: strong Python skills, experience with SQL and data analysis.",
-#      expected_output="A list of employee names, emails, and positions who match the given skills (Python, SQL, data analysis).",
-#     agent=db_agent
-# )
+# List their names, emails, positions, and departments.
+# """
+#     result = db_chain.run(prompt)
+#     return {**state, "query_results": result}
+def node_query_database(state: AgentState) -> AgentState:
+    prompt = f"""
+You are an expert SQL agent. Based on the following job description, find internal candidates who are a good match, 
+even if they do not meet every single requirement exactly. Prioritize candidates with most of the relevant skills 
+and sufficient years of experience.
 
+Job Description:
+\"\"\"{state['job_description']}\"\"\"
 
-# Run the agent as a crew
-crew = Crew(
-    agents=[db_agent],
-    tasks=[match_task],
-    verbose=True
-)
+Instructions:
+- Use OR conditions for matching skills instead of AND.
+- Prefer candidates with at least some relevant experience (e.g., 3+ years).
+- Retrieve the top 5 candidates based on the number of matching skills.
+- Return their names, emails, positions, and departments.
+"""
+    
+    result = db_chain.run(prompt)
+    return {**state, "query_results": result}
 
-# Execute
-result = crew.kickoff()
+# Build graph: generate → query → finish
+workflow = StateGraph(AgentState)
+workflow.add_node("generate_description", node_generate_description)
+workflow.add_node("query_database", node_query_database)
+workflow.set_entry_point("generate_description")
+workflow.add_edge("generate_description", "query_database")
+workflow.add_edge("query_database", END)
 
-print("=== Result ===")
-print(result)
+graph_app = workflow.compile()
+
+# Runner function
+def run_internal_match_flow(job_title: str,
+                            years_experience: Optional[str] = None,
+                            skills: Optional[str] = None,
+                            description: Optional[str] = None,
+                            industry: Optional[str] = None) -> AgentState:
+    result = graph_app.invoke({
+        "job_title": job_title,
+        "years_experience": years_experience,
+        "skills": skills,
+        "description": description,
+        "industry": industry
+    })
+    print("🔹 Job description:\n", result["job_description"])
+    print("✅ Matched internal candidates:\n", result["query_results"])
+    return result
