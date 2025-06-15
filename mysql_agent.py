@@ -79,6 +79,6 @@ def run_internal_match_flow(job_title: str,
         "description": description,
         "industry": industry
     })
-    print("🔹 Job description:\n", result["job_description"])
+   # print("🔹 Job description:\n", result["job_description"])
     print("✅ Matched internal candidates:\n", result["query_results"])
     return result

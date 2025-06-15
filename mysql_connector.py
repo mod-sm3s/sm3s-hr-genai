@@ -4,7 +4,8 @@ import re
 from job_description import  llm
 
 # Setup database connection
-db_uri = "mysql+mysqlconnector://root:iloveareD91%40@localhost/hr_assistant"
+# db_uri = "mysql+mysqlconnector://root:iloveareD91%40@localhost/hr_assistant"
+db_uri = "mysql+mysqlconnector://root:iloveareD91%40@localhost/company_data"
 db = SQLDatabase.from_uri(db_uri)
 
 # Strip markdown-style SQL (```sql ... ```)
