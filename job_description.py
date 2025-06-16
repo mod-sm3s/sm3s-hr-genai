@@ -40,5 +40,4 @@ Make it professional and clear.
         description=description or "None",
         industry=industry or "General"
     )
-
     return llm.invoke(prompt).content
