@@ -1,42 +1,86 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.schema import HumanMessage
-import PyPDF2
+import os
+import json
+import uuid
+from pathlib import Path
+from langchain_core.documents import Document
+from langchain_core.output_parsers import JsonOutputParser
+from langchain.prompts import PromptTemplate
+from PyPDF2 import PdfReader
+from job_description import llm
+# === CONFIG ===
 
-# Initialize Gemini 2.0 Flash Model
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.7)
+CANDIDATE_FILE = "candidates.json"
 
-# Extract text from PDF
-def extract_text_from_pdf(pdf_file):
+# === UTILITIES ===
+def read_pdf_text(file_path):
+    reader = PdfReader(file_path)
     text = ""
-    reader = PyPDF2.PdfReader(pdf_file)
     for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
+        text += page.extract_text()
+    return text.strip()
 
-# Extract skills from text
-def extract_skills(text):
-    prompt = f"Extract all skills (technical and soft) from the following text:\n{text}\nReturn as a comma-separated list."
-    response = llm.invoke([HumanMessage(content=prompt)])
-    return set(response.content.lower().split(","))
+def load_candidates():
+    if not os.path.exists(CANDIDATE_FILE):
+        return {}
+    with open(CANDIDATE_FILE, "r") as f:
+        return json.load(f)
 
-# Compare job description and resume skills
-def resume_score(job_desc_text, resume_text):
-    job_skills = extract_skills(job_desc_text)
-    resume_skills = extract_skills(resume_text)
+def save_candidates(data):
+    with open(CANDIDATE_FILE, "w") as f:
+        json.dump(data, f, indent=4)
 
-    matched_skills = job_skills.intersection(resume_skills)
-    missing_skills = job_skills - resume_skills
+def get_next_candidate_id(existing_data):
+    return f"candidate_{len(existing_data) + 1}"
 
-    # Format output
-    skill_comparison = {
-        skill: "✅ Yes" if skill in matched_skills else "❌ No"
-        for skill in job_skills
-    }
+# === PROMPT TEMPLATE ===
+prompt_template = PromptTemplate.from_template("""
+You are an HR assistant. Given a job description and a candidate's resume, do the following:
+1. Score the resume from 0 to 100 based on how well it fits the job.
+2. Extract structured information as JSON with the following keys:
+   - name, email, phone, years_of_experience, last_employers (list), year_of_grad,
+     skills (list), education (list), certificates (list), gender, address,
+     linkedin, github, current_position, languages (list), score
 
-    return skill_comparison
+If a value is missing in the resume, leave it as null.
 
-def resume_description(job_desc_text, resume_text):
-    prompt = f"Evaluate the resume against the job description.\n\nJob Description:\n{job_desc_text}\n\nResume:\n{resume_text}\n\nHow well does this candidate fit?"
-    
-    response = llm.invoke([HumanMessage(content=prompt)])
-    return response.content
+--- JOB DESCRIPTION ---
+{job_description}
+
+--- RESUME ---
+{resume}
+""")
+
+# === MAIN FUNCTION ===
+def evaluate_resume(resume_path: str, jd_path: str):
+    resume_text = read_pdf_text(resume_path)
+    jd_text = read_pdf_text(jd_path)
+
+    prompt = prompt_template.format(resume=resume_text, job_description=jd_text)
+    response = llm.invoke(prompt)
+
+    parser = JsonOutputParser()
+    try:
+        structured = parser.invoke(response)
+    except Exception:
+        import ast
+        structured = ast.literal_eval(response.content)
+
+    candidates = load_candidates()
+    candidate_id = get_next_candidate_id(candidates)
+    candidates[candidate_id] = structured
+    save_candidates(candidates)
+
+    print(f"✅ {candidate_id} evaluated and added.")
+    return candidate_id, structured
+
+# === RUN SCRIPT ===
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--resume", help="Path to a single resume PDF")
+    group.add_argument("--resume_folder", help="Folder path containing multiple resume PDFs")
+    parser.add_argument("--jd", required=True, help="Path to job description PDF")
+    args = parser.parse_args()
+
+    evaluate_resume(args.resume, args.jd)
