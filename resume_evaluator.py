@@ -84,3 +84,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     evaluate_resume(args.resume, args.jd)
+
+#python module1_resume_evaluator.py --resume resume.pdf --jd job_description.pdf
+#python module1_resume_evaluator.py --resume_folder resumes/ --jd job_description.pdf
